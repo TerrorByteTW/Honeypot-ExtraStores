@@ -38,6 +38,7 @@ dependencies {
     compileOnly(libs.paper.api)
     compileOnly(libs.honeypot.api)
     compileOnly(libs.boosted.yaml)
+    implementation(libs.hikaricp)
 }
 
 tasks.withType<JavaCompile> {

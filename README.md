@@ -4,17 +4,20 @@ A plugin to provide extra data stores to Honeypot. [Check out Honeypot here!](ht
 
 ## Stores
 
-- `datacontainer` - Provides the same support as the legacy PDC provider that Honeypot used to provide
-    - PDC cannot, by nature, support purging all players or player history, nor can it support removing a specific
-      number of player history records. PDC stores its data within the `Player` itself, so there is no source of truth
-      for "all" players or records.
-- `file` - An incomplete file-based data store that uses a YAML file to store data.
-    - This is horrendously slow, all things considered, and should not be used in production unless other options just
-      aren't available to you.
-- `database` - A yet-to-be-implemented database-based data store that uses a MySQL database to store data.
-    - Honeypot does not support asynchronous operations, so this store instead dynamically loads and unloads data from
-      the database around a given player as needed. These operations are asynchronous, but since the data is loaded into
-      memory, there is no risk of issues related to performance.
-    - Note that there is a potential for Honeypot misses if a Player teleports, then triggers a Honeypot before the
-      database can be queried for blocks nearby.
+- `mysql` - A database-backed data store that uses a MySQL (Or MariaDB) database to store data.
+    - Honeypot does not support asynchronous operations, so this store instead loads and unloads Honeypot blocks from
+      storage based on when the _server_ (not a player) loads/unloads chunks. The stored data is kept in-memory for
+      synchronous querying. Changes to the in-memory data are reflected in the database asynchronously.
     - Configure the database via `config.yml`
+    - The database user must be able to SELECT, INSERT, UPDATE, DELETE, and CREATE tables and indexes.
+
+## Unsupported Stores
+
+Honeypot does not support data stores that rely on the presence of players/entities, or are asynchronous in nature.
+
+In Honeypot 4, PDC was removed. Plans originally existed to support PDC via an official storage provider add-on,
+but it was abandoned due to PDC, by nature, not being able to support all the features that Honeypot provides.
+
+This is because PDC typically stores data inside an entity or block of some sort, yet we must be able to query all data
+regardless of where it's stored. Fragmenting data storage across multiple entities/blocks that may or may not exist when
+needed makes it impossible to operate.

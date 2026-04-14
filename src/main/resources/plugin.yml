@@ -1,4 +1,4 @@
-name: Test
+name: HoneypotExtraStores
 version: '@version@'
 author: TerrorByte
 description: Provides extra storage providers to Honeypot

@@ -1,0 +1,9 @@
+mysql:
+  enabled: false
+  host: "127.0.0.1"
+  port: 3306
+  database: "minecraft"
+  username: ""
+  password: ""
+  parameters: "useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+  worker-threads: 4
