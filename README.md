@@ -10,6 +10,8 @@ A plugin to provide extra data stores to Honeypot. [Check out Honeypot here!](ht
       synchronous querying. Changes to the in-memory data are reflected in the database asynchronously.
     - Configure the database via `config.yml`
     - The database user must be able to SELECT, INSERT, UPDATE, DELETE, and CREATE tables and indexes.
+    - You must start your server at least once to generate the configuration file needed to configure this store.
+      Configure the store, set Honeypot to use the `mysql` data store, then reboot your server again.
 
 ## Unsupported Stores
 
