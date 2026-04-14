@@ -16,7 +16,7 @@ import org.reprogle.honeypot.common.storageproviders.*;
 import java.io.*;
 import java.util.*;
 
-@HoneypotStore(name = "datacontainer")
+@HoneypotStore(name = "file")
 public class FileStore extends StorageProvider {
 
     final ExtraStores plugin;
@@ -51,12 +51,12 @@ public class FileStore extends StorageProvider {
 
     @Override
     public HoneypotBlockObject getHoneypotBlock(Block block) {
-        return isHoneypotBlock(block) ? new HoneypotBlockObject(block, getAction(block)) : null;
+        return isHoneypotBlock(block) ? store.getAs(formatKey(block), HoneypotBlockObject.class) : null;
     }
 
     @Override
     public String getAction(Block block) {
-        return ((HoneypotBlockObject) store.get(formatKey(block))).getAction();
+        return store.getAs(formatKey(block), HoneypotBlockObject.class).getAction();
     }
 
     @Override
@@ -67,7 +67,17 @@ public class FileStore extends StorageProvider {
 
     @Override
     public List<HoneypotBlockObject> getAllHoneypots(@Nullable World world) {
-        throw new NotImplementedException();
+        List<HoneypotBlockObject> blocks = new ArrayList<>();
+
+        // We can't use deep = true because it would cause returns of routes that aren't honeypots (such as honeypots.world.0.0.0.action)
+        store.getSection("honeypots").getRoutes(false)
+            .forEach(x -> store.getSection(x).getRoutes(false)
+                .forEach(y -> store.getSection(y).getRoutes(false)
+                    .forEach(z -> blocks.add(store.getAs(z, HoneypotBlockObject.class)))
+                )
+            );
+
+        return blocks;
     }
 
     @Override

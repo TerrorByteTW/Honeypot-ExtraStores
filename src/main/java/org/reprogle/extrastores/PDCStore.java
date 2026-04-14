@@ -92,7 +92,7 @@ public class PDCStore extends StorageProvider {
 
     @Override
     public void addPlayer(Player player, int blocksBroken) {
-        Logger.getLogger("minecraft").info("Add player was called!");
+        player.getPersistentDataContainer().set(new NamespacedKey(plugin, "player-count"), PersistentDataType.INTEGER, blocksBroken);
     }
 
     @Override
