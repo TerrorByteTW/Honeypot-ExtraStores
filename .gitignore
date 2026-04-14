@@ -1,0 +1,6 @@
+# Ignore the target folder
+target/
+build/
+.gradle/
+# Ignore the .vscode folder
+.vscode/
